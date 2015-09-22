@@ -17,7 +17,7 @@ static inline uint8_t clamp255( const integer value )
   return value;
 }
 
-class Raster : public SimpleRaster
+class Raster : public AbstractRaster
 {
 public:
   template <unsigned int size>

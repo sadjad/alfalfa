@@ -1,10 +1,10 @@
 #include "raster.hh"
 
-SimpleRaster::SimpleRaster( const unsigned int display_width, const unsigned int display_height )
+AbstractRaster::AbstractRaster( const unsigned int display_width, const unsigned int display_height )
   : display_width_( display_width ), display_height_( display_height )
 {}
 
-size_t SimpleRaster::raw_hash( void ) const
+size_t AbstractRaster::raw_hash( void ) const
 {
   size_t hash_val = 0;
 
@@ -15,29 +15,29 @@ size_t SimpleRaster::raw_hash( void ) const
   return hash_val;
 }
 
-double SimpleRaster::quality( const SimpleRaster & other ) const
+double AbstractRaster::quality( const AbstractRaster & other ) const
 {
   return ssim( Y(), other.Y() );
 }
 
-bool SimpleRaster::operator==( const SimpleRaster & other ) const
+bool AbstractRaster::operator==( const AbstractRaster & other ) const
 {
   return (Y() == other.Y()) and (U() == other.U()) and (V() == other.V());
 }
 
-bool SimpleRaster::operator!=( const SimpleRaster & other ) const
+bool AbstractRaster::operator!=( const AbstractRaster & other ) const
 {
   return not operator==( other );
 }
 
-void SimpleRaster::copy_from( const SimpleRaster & other )
+void AbstractRaster::copy_from( const AbstractRaster & other )
 {
   Y().copy_from( other.Y() );
   U().copy_from( other.U() );
   V().copy_from( other.V() );
 }
 
-void SimpleRaster::dump( FILE * file ) const
+void AbstractRaster::dump( FILE * file ) const
 {
   for ( unsigned int row = 0; row < display_height(); row++ ) {
     fwrite( &Y().at( 0, row ), display_width(), 1, file );

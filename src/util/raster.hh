@@ -22,14 +22,14 @@ TwoDStorage<uint8_t>::TwoDStorage( const unsigned int width, const unsigned int 
   assert( height > 0 );
 }
 
-class SimpleRaster
+class AbstractRaster
 {
 protected:
   unsigned int display_width_, display_height_;
   size_t raw_hash( void ) const;
 
 public:
-  SimpleRaster( const unsigned int display_width, const unsigned int display_height );
+  AbstractRaster( const unsigned int display_width, const unsigned int display_height );
 
   virtual TwoD< uint8_t > & Y( void ) = 0;
   virtual TwoD< uint8_t > & U( void ) = 0;
@@ -45,15 +45,15 @@ public:
   unsigned int display_height( void ) const { return display_height_; }
 
   // SSIM as determined by libx264
-  double quality( const SimpleRaster & other ) const;
+  double quality( const AbstractRaster & other ) const;
 
-  bool operator==( const SimpleRaster & other ) const;
-  bool operator!=( const SimpleRaster & other ) const;
+  bool operator==( const AbstractRaster & other ) const;
+  bool operator!=( const AbstractRaster & other ) const;
 
-  void copy_from( const SimpleRaster & other );
+  void copy_from( const AbstractRaster & other );
   void dump( FILE * file ) const;
 
-  virtual ~SimpleRaster() {}
+  virtual ~AbstractRaster() {}
 };
 
 #endif /* RASTER_HH */
