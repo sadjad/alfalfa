@@ -26,30 +26,21 @@ class SimpleRaster
 {
 protected:
   unsigned int display_width_, display_height_;
-
-  // FIXME This is not right, as width_ & height_ are internal to VP8.
-  unsigned int width_ { 16 * macroblock_dimension( display_width_ ) },
-    height_ { 16 * macroblock_dimension( display_height_ ) };
-
-  TwoD< uint8_t > Y_ { width_, height_ },
-    U_ { width_ / 2, height_ / 2 },
-    V_ { width_ / 2, height_ / 2 };
-
   size_t raw_hash( void ) const;
 
 public:
   SimpleRaster( const unsigned int display_width, const unsigned int display_height );
 
-  TwoD< uint8_t > & Y( void ) { return Y_; }
-  TwoD< uint8_t > & U( void ) { return U_; }
-  TwoD< uint8_t > & V( void ) { return V_; }
+  virtual TwoD< uint8_t > & Y( void ) = 0;
+  virtual TwoD< uint8_t > & U( void ) = 0;
+  virtual TwoD< uint8_t > & V( void ) = 0;
 
-  const TwoD< uint8_t > & Y( void ) const { return Y_; }
-  const TwoD< uint8_t > & U( void ) const { return U_; }
-  const TwoD< uint8_t > & V( void ) const { return V_; }
+  virtual const TwoD< uint8_t > & Y( void ) const = 0;
+  virtual const TwoD< uint8_t > & U( void ) const = 0;
+  virtual const TwoD< uint8_t > & V( void ) const = 0;
 
-  unsigned int width( void ) const { return width_; }
-  unsigned int height( void ) const { return height_; }
+  virtual unsigned int width( void ) const = 0;
+  virtual unsigned int height( void ) const = 0;
   unsigned int display_width( void ) const { return display_width_; }
   unsigned int display_height( void ) const { return display_height_; }
 
@@ -62,7 +53,7 @@ public:
   void copy_from( const SimpleRaster & other );
   void dump( FILE * file ) const;
 
-  static unsigned int macroblock_dimension( const unsigned int num ) { return ( num + 15 ) / 16; }
+  virtual ~SimpleRaster() {}
 };
 
 #endif /* RASTER_HH */

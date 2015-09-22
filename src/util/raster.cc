@@ -8,9 +8,9 @@ size_t SimpleRaster::raw_hash( void ) const
 {
   size_t hash_val = 0;
 
-  boost::hash_range( hash_val, Y_.begin(), Y_.end() );
-  boost::hash_range( hash_val, U_.begin(), U_.end() );
-  boost::hash_range( hash_val, V_.begin(), V_.end() );
+  boost::hash_range( hash_val, Y().begin(), Y().end() );
+  boost::hash_range( hash_val, U().begin(), U().end() );
+  boost::hash_range( hash_val, V().begin(), V().end() );
 
   return hash_val;
 }
@@ -22,7 +22,7 @@ double SimpleRaster::quality( const SimpleRaster & other ) const
 
 bool SimpleRaster::operator==( const SimpleRaster & other ) const
 {
-  return (Y_ == other.Y_) and (U_ == other.U_) and (V_ == other.V_);
+  return (Y() == other.Y()) and (U() == other.U()) and (V() == other.V());
 }
 
 bool SimpleRaster::operator!=( const SimpleRaster & other ) const
@@ -32,9 +32,9 @@ bool SimpleRaster::operator!=( const SimpleRaster & other ) const
 
 void SimpleRaster::copy_from( const SimpleRaster & other )
 {
-  Y_.copy_from( other.Y_ );
-  U_.copy_from( other.U_ );
-  V_.copy_from( other.V_ );
+  Y().copy_from( other.Y() );
+  U().copy_from( other.U() );
+  V().copy_from( other.V() );
 }
 
 void SimpleRaster::dump( FILE * file ) const
