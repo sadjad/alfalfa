@@ -10,50 +10,13 @@
 #include <boost/multi_index/hashed_index.hpp>
 #include <boost/multi_index/sequenced_index.hpp>
 
+#include "frame_data.hh"
 #include "dependency_tracking.hh"
 
 using namespace std;
 using namespace boost;
 using namespace boost::multi_index;
 using boost::multi_index_container;
-
-struct FrameData
-{
-  std::string frame_name;
-
-  std::string ivf_filename;
-  size_t offset;
-  size_t length;
-
-  SourceHash source_hash;
-  TargetHash target_hash;
-
-  FrameData( std::string frame_name,
-    std::string ivf_filename,
-    size_t offset,
-    size_t length )
-    : frame_name( frame_name ),
-      ivf_filename( ivf_filename ),
-      offset( offset ),
-      length( length ),
-      source_hash( frame_name ),
-      target_hash( frame_name )
-  {}
-
-  FrameData( std::string frame_name,
-    std::string ivf_filename,
-    size_t offset,
-    size_t length,
-    SourceHash source_hash,
-    TargetHash target_hash )
-    : frame_name( frame_name ),
-      ivf_filename( ivf_filename ),
-      offset( offset ),
-      length( length ),
-      source_hash( source_hash ),
-      target_hash( target_hash )
-  {}
-};
 
 struct FrameData_SourceHashHash
 {
