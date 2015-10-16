@@ -41,7 +41,7 @@ int main()//( int argc, char const *argv[] )
   while ( getline( fin, line ) ) {
     istringstream ss( line );
     ss >> frame_name >> offset;
-    FrameData fd( frame_name, "test.ivf", offset, 100 );
+    FrameInfo fd( frame_name, "test.ivf", offset, 100 );
     fdb.insert(fd);
   }
 
@@ -49,14 +49,14 @@ int main()//( int argc, char const *argv[] )
 
   cout << "frame_manifest read completed." << endl;
 
-  vector<vector<FrameData> > streams;
+  vector<vector<FrameInfo> > streams;
 
   fin.open( "manifests/stream_manifest" );
 
   while ( getline( fin, line ) ) {
     istringstream ss( line );
     ss >> q >> frame_name;
-    FrameData fd( frame_name, "", 0, 0 );
+    FrameInfo fd( frame_name, "", 0, 0 );
 
     if( q >= streams.size() ) {
       streams.resize( q + 1 );

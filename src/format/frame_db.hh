@@ -10,7 +10,7 @@
 #include <boost/multi_index/hashed_index.hpp>
 #include <boost/multi_index/sequenced_index.hpp>
 
-#include "frame_data.hh"
+#include "frame_info.hh"
 #include "dependency_tracking.hh"
 
 using namespace std;
@@ -50,22 +50,22 @@ struct FrameData_OutputHashExtractor
 {
   typedef size_t result_type;
 
-  const result_type & operator()( const FrameData & fd ) const { return fd.target_hash.output_hash; }
-  result_type & operator()( FrameData * fd ) { return fd->target_hash.output_hash; }
+  const result_type & operator()( const FrameInfo & fd ) const { return fd.target_hash.output_hash; }
+  result_type & operator()( FrameInfo * fd ) { return fd->target_hash.output_hash; }
 };
 
 struct FrameData_SourceHashExtractor
 {
   typedef SourceHash result_type;
 
-  const result_type & operator()( const FrameData & fd ) const { return fd.source_hash; }
-  result_type & operator()( FrameData * fd ) { return fd->source_hash; }
+  const result_type & operator()( const FrameInfo & fd ) const { return fd.source_hash; }
+  result_type & operator()( FrameInfo * fd ) { return fd->source_hash; }
 };
 
 typedef multi_index_container<
-  FrameData,
+  FrameInfo,
   indexed_by<
-    hashed_unique<member<FrameData, std::string, &FrameData::frame_name> >,
+    hashed_unique<member<FrameInfo, std::string, &FrameInfo::frame_name> >,
     hashed_non_unique<FrameData_OutputHashExtractor>,
     hashed_non_unique<FrameData_SourceHashExtractor,
       FrameData_SourceHashHash,
@@ -83,11 +83,7 @@ class FrameDataSetSourceHashSearch
 {
 private:
   class FrameDataSetSourceHashSearchIterator
-    : public std::iterator<std::forward_iterator_tag,
-                          FrameData,
-                          std::ptrdiff_t,
-                          FrameData*,
-                          FrameData&>
+    : public std::iterator<std::forward_iterator_tag, FrameInfo>
   {
   private:
     size_t stage_;
@@ -108,8 +104,8 @@ private:
     bool operator==( const FrameDataSetSourceHashSearchIterator & rhs ) const;
     bool operator!=( const FrameDataSetSourceHashSearchIterator & rhs ) const;
 
-    const FrameData & operator*() const;
-    const FrameData * operator->() const;
+    const FrameInfo & operator*() const;
+    const FrameInfo * operator->() const;
   };
 
   SourceHash source_hash_;
@@ -135,7 +131,7 @@ private:
 public:
   FrameDB( const std::string & filename );
 
-  void insert( FrameData fd );
+  void insert( FrameInfo fd );
 
   std::pair<FrameDataSetByFrameName::iterator, FrameDataSetByFrameName::iterator>
   search_by_frame_name( std::string & frame_name );

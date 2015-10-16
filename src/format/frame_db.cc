@@ -29,7 +29,7 @@ void FrameDB::load( ifstream & fin )
       break;
     }
 
-    FrameData fd( frame_name, ivf_filename, offset, length );
+    FrameInfo fd( frame_name, ivf_filename, offset, length );
     insert( fd );
   }
 }
@@ -46,7 +46,7 @@ void FrameDB::save()
   fout.close();
 }
 
-void FrameDB::insert( FrameData fd )
+void FrameDB::insert( FrameInfo fd )
 {
   data_.insert( fd );
 }
@@ -172,14 +172,14 @@ bool FrameDataSetSourceHashSearch::FrameDataSetSourceHashSearchIterator
   return itr_ != rhs.itr_;
 }
 
-const FrameData & FrameDataSetSourceHashSearch::FrameDataSetSourceHashSearchIterator
+const FrameInfo & FrameDataSetSourceHashSearch::FrameDataSetSourceHashSearchIterator
 ::operator*() const
 {
   assert( itr_ != data_set_.end() );
   return *itr_;
 }
 
-const FrameData * FrameDataSetSourceHashSearch::FrameDataSetSourceHashSearchIterator
+const FrameInfo * FrameDataSetSourceHashSearch::FrameDataSetSourceHashSearchIterator
 ::operator->() const
 {
   assert( itr_ != data_set_.end() );

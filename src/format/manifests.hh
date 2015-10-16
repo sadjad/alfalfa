@@ -69,11 +69,6 @@ class TrackDataVector : public vector<std::string>
 using QualityDB = KVStore< size_t, QualityData >;
 
 /* relation:
-   frame name / IVF filename / offset / length */
-
-// using FrameDB = Database< std::string, FrameData >;
-
-/* relation:
    ID => { sequence of frame names } */
 
 using TrackDB = KVStore< size_t, TrackDataVector >;
