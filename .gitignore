@@ -42,6 +42,7 @@ Makefile.in
 /src/frontend/alfalfa-play-manually
 /src/frontend/alfalfa-play-super-manually
 /src/frontend/alfalfa-verify
+/src/frontend/play-stats
 /src/tests/decode-to-stdout
 /src/tests/encode-loopback
 /src/tests/extract-key-frames

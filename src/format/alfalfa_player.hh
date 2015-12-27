@@ -148,6 +148,7 @@ private:
     }
   };
 
+public:
   std::tuple<SwitchPath, Optional<TrackPath>, FrameDependency>
   get_min_switch_seek( const size_t output_hash );
 
