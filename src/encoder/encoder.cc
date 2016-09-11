@@ -399,6 +399,7 @@ uint32_t Encoder::rdcost( uint32_t rate, uint32_t distortion,
 template<class FrameType>
 void Encoder::optimize_probability_tables( FrameType & frame, const TokenBranchCounts & token_branch_counts )
 {
+  return;
   for ( unsigned int i = 0; i < BLOCK_TYPES; i++ ) {
     for ( unsigned int j = 0; j < COEF_BANDS; j++ ) {
       for ( unsigned int k = 0; k < PREV_COEF_CONTEXTS; k++ ) {
