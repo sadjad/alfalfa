@@ -73,11 +73,8 @@ VP8Raster::VP8Raster( const unsigned int display_width, const unsigned int displ
 template <unsigned int size>
 typename VP8Raster::Block<size>::Predictors VP8Raster::Block<size>::predictors() const
 {
-  static TwoD< uint8_t > row127_storage( size, 1, 127 );
-  static TwoD< uint8_t > col129_storage( 1, size, 129 );
-
-  static const Row row127( row127_storage, 0, 0 );
-  static const Column col129( col129_storage, 0, 0 );
+  static const uint8_t ROW_127 = 127;
+  static const uint8_t COL_129 = 129;
 
   Predictors predictors_;
 
@@ -88,21 +85,15 @@ typename VP8Raster::Block<size>::Predictors VP8Raster::Block<size>::predictors()
     }
   }
   else {
-    for ( size_t i = 0; i < size; i++ ) {
-      predictors_.left[ i ] = col129.at( 0, i );
-    }
+    memset( predictors_.left, COL_129, size );
   }
 
   // above
   if ( row_ > 0 ) {
-    for ( size_t i = 0; i < size; i++ ) {
-      predictors_.above[ i ] = raster_component_.at( size * column_ + i, size * row_ - 1 );
-    }
+    memcpy( predictors_.above, &raster_component_.at( size * column_, size * row_ - 1 ), size );
   }
   else {
-    for ( size_t i = 0; i < size; i++ ) {
-      predictors_.above[ i ] = row127.at( i, 0 );
-    }
+    memset( predictors_.above, ROW_127, size );
   }
 
   // above-left
@@ -110,10 +101,10 @@ typename VP8Raster::Block<size>::Predictors VP8Raster::Block<size>::predictors()
     predictors_.above[ -1 ] = raster_component_.at( size * column_ - 1, size * row_ - 1 );
   }
   else if ( row_ > 0 ) {
-    predictors_.above[ -1 ] = col129.at( 0, 0 );
+    predictors_.above[ -1 ] = COL_129;
   }
   else {
-    predictors_.above[ -1 ] = row127.at( 0, 0 );
+    predictors_.above[ -1 ] = ROW_127;
   }
 
   if ( size != 4 ) {
@@ -121,28 +112,28 @@ typename VP8Raster::Block<size>::Predictors VP8Raster::Block<size>::predictors()
   }
 
   // above-right-bottom-row -- only for 4x4 subblocks
-  if ( row_ > 0 and ( size * ( column_ + 1 ) < raster_component_.width() ) ) {
-    if ( column_ % 4 == 3 and row_ % 4 != 0 ) {
-      if ( row_ > 3 ) {
-        for ( size_t i = 0; i < size; i++ ) {
-          predictors_.above[ size + i ] = raster_component_.at( size * ( column_ + 1 ) + i, size * ( ( row_ / 4 ) * 4 ) - 1 );
-        }
-      }
-      else {
-        for ( size_t i = 0; i < size; i++ ) {
-          predictors_.above[ size + i ] = row127.at( i, 0 );
-        }
-      }
+  if ( row_ == 0 ) {
+    memset( predictors_.above + size, ROW_127, size );
+  }
+  else if ( size * ( column_ + 1 ) >= raster_component_.width() ) {
+    if ( row_ >= 4 ) {
+      memset( predictors_.above + size, raster_component_.at( size * ( column_ + 1 ) - 1, size * ( ( row_ / 4 ) * 4 ) - 1 ), size );
     }
     else {
-      for ( size_t i = 0; i < size; i++ ) {
-        predictors_.above[ size + i ] = raster_component_.at( size * ( column_ + 1 ) + i, size * row_ - 1 );
-      }
+      memset( predictors_.above + size, ROW_127, size );
     }
   }
   else {
-    for ( size_t i = 0; i < size; i++ ) {
-      predictors_.above[ size + i ] = row127.at( i, 0 );
+    if ( column_ % 4 == 3 and row_ % 4 != 0 ) {
+      if ( row_ >= 4 ) {
+        memcpy( predictors_.above + size, &raster_component_.at( size * ( column_ + 1 ), size * ( ( row_ / 4 ) * 4 ) - 1 ), size );
+      }
+      else {
+        memset( predictors_.above + size, ROW_127, size );
+      }
+    }
+    else {
+      memcpy( predictors_.above + size, &raster_component_.at( size * ( column_ + 1 ), size * row_ - 1 ), size );
     }
   }
 
