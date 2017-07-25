@@ -5,7 +5,7 @@ BASE_LDADD = ../input/libalfalfainput.a ../decoder/libalfalfadecoder.a ../util/l
 
 VP8PLAY_BUILD :=
 if BUILDVP8PLAY
-VP8PLAY_BUILD += vp8play salsify-receiver real-webcam
+VP8PLAY_BUILD += y4mplay vp8play salsify-receiver real-webcam
 endif
 bin_PROGRAMS = vp8decode xc-enc xc-ssim xc-dissect xc-framesize xc-dump \
                xc-diff comp-states xc-decode-bundle xc-merge \
@@ -24,6 +24,13 @@ vp8play_LDADD = ../display/libalfalfadisplay.a $(BASE_LDADD) $(GLU_LIBS) $(GLEW_
 # NOTE: Debian does not distribute static libs for libGLEW et al,
 # so we have to override AM_LDFLAGS and always dynamically link
 vp8play_LDFLAGS =
+
+y4mplay_SOURCES = y4mplay.cc
+y4mplay_CPPFLAGS = $(AM_CPPFLAGS) $(GLU_CFLAGS) $(GLEW_CFLAGS) $(GLFW3_CFLAGS)
+y4mplay_LDADD = ../display/libalfalfadisplay.a $(BASE_LDADD) $(GLU_LIBS) $(GLEW_LIBS) $(GLFW3_LIBS)
+# NOTE: Debian does not distribute static libs for libGLEW et al,
+# so we have to override AM_LDFLAGS and always dynamically link
+y4mplay_LDFLAGS =
 
 xc_enc_SOURCES = xc-enc.cc
 xc_enc_LDADD = ../encoder/libalfalfaencoder.a $(BASE_LDADD)
